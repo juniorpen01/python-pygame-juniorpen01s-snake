@@ -13,8 +13,10 @@ class Snake:
         length_initial: int,
         direction_head: Direction,
     ) -> None:
-        if length_initial < 1:
+        if not length_initial:
             raise ValueError("length_initial is zero")
+        elif length_initial < 0:
+            raise ValueError("length_initial is negative")
 
         self.body: list[Vector2] = []
         self._direction: Optional[Direction] = direction_head
