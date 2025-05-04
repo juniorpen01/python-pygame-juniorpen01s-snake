@@ -20,7 +20,7 @@ class Direction(Enum):
             case Direction.RIGHT:
                 return Direction.LEFT
 
-    def into_vector2(self):
+    def into_vector2(self) -> Vector2:
         match self:
             case Direction.LEFT:
                 return Vector2(-1, 0)

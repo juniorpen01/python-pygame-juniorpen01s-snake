@@ -1,6 +1,7 @@
 from typing import Optional
 
 from pygame import Vector2
+from pygame.typing import IntPoint
 
 from .direction import Direction
 
@@ -8,18 +9,18 @@ from .direction import Direction
 class Snake:
     def __init__(
         self,
-        position_initial: Vector2,
+        position_initial: IntPoint,
         length_initial: int,
         direction_head: Direction,
     ) -> None:
-        if not length_initial:
+        if length_initial < 1:
             raise ValueError("length_initial is zero")
 
         self.body: list[Vector2] = []
         self._direction: Optional[Direction] = direction_head
 
         self.body += [
-            Vector2(position_initial - direction_head.into_vector2() * i)
+            (position_initial - direction_head.into_vector2() * i)
             for i in range(length_initial)
         ]
 

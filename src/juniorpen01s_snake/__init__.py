@@ -1,39 +1,36 @@
-import sys
+from typing import Protocol
 
-import pygame
-from pygame import Vector2, display, event, image, transform
+from pygame import Surface, image, transform
+from pygame.typing import IntPoint
 
 from core.direction import Direction
+from core.game import Game
 from core.snake import Snake
+
+
+class SnakeData(Protocol):
+    position_initial: IntPoint
+    length_initial: int
+    direction_initial: Direction
+
+
+class Data:
+    title: str = "juniorpen01's Snake"
+    dimensions_screen: IntPoint = 800, 800
+    snake = Snake((3, 17), 6, Direction.DOWN)
+    cat_image = image.load("assets/cat.jpg")
+    cat_image_scaled = transform.scale(cat_image, (800, 800))
 
 
 def main() -> None:
     print("Hello from juniorpen01s-snake!")
 
-    snake = Snake(Vector2(3, 17), 6, Direction.DOWN)
-    snake.grow()
+    def on_initialize(screen: Surface, data: Data):
+        data.snake.grow()
 
-    print(snake.body)
+        print(data.snake.body)
 
-    pygame.init()
-    pygame.display.set_caption("juniorpen01's Snake")
-    screen = display.set_mode((800, 800))
+    def on_update(screen: Surface, data: Data):
+        screen.blit(data.cat_image_scaled, (0, 0))
 
-    cat_image = image.load("assets/cat.jpg")
-    cat_image_scaled = transform.scale(cat_image, (800, 800))
-
-    is_running = True
-    while is_running:
-        for ev in event.get():
-            match ev.type:
-                case pygame.QUIT:
-                    is_running = False
-                case _:
-                    pass
-
-        screen.blit(cat_image_scaled, (0, 0))
-
-        pygame.display.update()
-
-    pygame.quit()
-    sys.exit()
+    Game(Data()).on_initialize(on_initialize).on_update(on_update).run()
